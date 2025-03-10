@@ -9,6 +9,8 @@ import SignatureList from './components/SignatureList';
 import ActionButtons from './components/ActionButtons';
 import LoginPrompt from './components/LoginPrompt';
 import ErrorAlert from './components/ErrorAlert';
+import Toast from './components/Toast';
+import "./App.css"
 
 function App() {
   const [userObject, setUserObjectState] = useState<UserObject | null>(null);
@@ -75,15 +77,17 @@ function App() {
     // If no fresh signatures in storage, fetch them
     try {
       const data = await fetchSignatures(userId);
+      
       if (data && data.html && Array.isArray(data.html)) {
         setSignaturesState(data.html);
       }
     } catch (err) {
+      setError('Looks like server is busy please try again');
       console.error('Error fetching signatures:', err);
-      // Still use cached signatures if available, even if outdated
-      if (storedSignatures && storedSignatures.length > 0) {
-        setSignaturesState(storedSignatures);
-      }
+      // // Still use cached signatures if available, even if outdated
+      // if (storedSignatures && storedSignatures.length > 0) {
+      //   setSignaturesState(storedSignatures);
+      // }
     }
   }
 
@@ -181,7 +185,7 @@ if (!isLoading && !userObject) {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="glass-container min-h-[500px] min-w-[350px] max-w-md mx-auto overflow-hidden animate-fade-in ">
       <Header isConnected={!!userObject} />
       
       {error && (
@@ -192,23 +196,19 @@ if (!isLoading && !userObject) {
       )}
       
       {statusMessage && (
-        <div className={`mb-4 p-3 rounded-md ${
-          statusMessage.type === 'success' 
-            ? 'bg-green-100 text-green-800' 
-            : statusMessage.type === 'info'
-              ? 'bg-blue-100 text-blue-800'
-              : 'bg-red-100 text-red-800'
-        }`}>
-          {statusMessage.text}
-        </div>
+        <Toast 
+          message={statusMessage.text} 
+          type={statusMessage.type} 
+        />
       )}
       
       {isLoading ? (
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+        <div className="flex flex-col justify-center items-center py-16">
+          <div className="loader"></div>
+          <p className="mt-4 text-primary-600 animate-pulse-slow">Loading your signatures...</p>
         </div>
       ) : (
-        <>
+        <div className="content-container p-4">
           {userObject && <UserInfo user={userObject} />}
           
           {signatures && signatures.length > 0 ? (
@@ -218,8 +218,17 @@ if (!isLoading && !userObject) {
               onSelectSignature={handleSelectSignature}
             />
           ) : (
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
-              <p className="text-yellow-700">No signatures found. Please ensure you're logged in.</p>
+            <div className="empty-state">
+              <div className="empty-state-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <path d="M14 2v6h6"></path>
+                  <path d="M16 13H8"></path>
+                  <path d="M16 17H8"></path>
+                  <path d="M10 9H8"></path>
+                </svg>
+              </div>
+              <p className="empty-state-text">No signatures found. Please ensure you're logged in.</p>
             </div>
           )}
           
@@ -227,7 +236,7 @@ if (!isLoading && !userObject) {
             onRefresh={handleRefresh}
             onClear={handleClearData}
           />
-        </>
+        </div>
       )}
     </div>
   );

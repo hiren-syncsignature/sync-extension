@@ -43,20 +43,27 @@ async function checkForUserToken() {
         
         try {
           // Try to get user from tab
-          const userObject = await getUserFromTab(tab.id);
+          const tabs = await chrome.tabs.query({active: true, currentWindow: true});
+          const activeTab = tabs[0];
           
-          if (userObject) {
-            // Save to extension storage
-            await setUserObject(userObject);
-            logger.success('User object saved to extension storage from tab:', tab.id);
-            
-            // After getting the token, fetch signatures
-            if (userObject.id) {
-              await fetchAndStoreSignatures(userObject.id);
+          // Check if we're on a compatible page
+          if (activeTab.url?.includes('localhost:3000') || activeTab.url?.includes('app.syncsignature.com')) {
+            const userObject = await getUserFromTab(tab.id);
+            if (userObject) {
+              // Save to extension storage
+              await setUserObject(userObject);
+              logger.success('User object saved to extension storage from tab:', tab.id);
+              
+              // After getting the token, fetch signatures
+              if (userObject.id) {
+                await fetchAndStoreSignatures(userObject.id);
+              }
+              
+              break; // Stop after finding a valid token
             }
-            
-            break; // Stop after finding a valid token
-          }
+          }    
+          
+
         } catch (e) {
           logger.error('Error extracting user token from tab:', tab.id, e);
         }

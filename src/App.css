@@ -1,2 +1,336 @@
-/* Start writing your main Popup css here */
-/* Although this templates comes preconfigured with tailwind css for faster ui development */
+/* Custom Component Styles */
+
+/* Glass Container */
+.glass-container {
+    @apply bg-white/80 backdrop-blur-md border border-white/30 shadow-lg rounded-xl;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .glass-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  }
+  
+  /* Header */
+  .header-container {
+    @apply flex justify-between items-center p-4 border-b border-primary-100;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.7), rgba(245, 243, 255, 0.7));
+  }
+  
+  .logo-container {
+    @apply flex items-center gap-3;
+  }
+  
+  .logo {
+    @apply flex items-center justify-center w-10 h-10 rounded-lg bg-primary-600 text-white;
+  }
+  
+  .logo-text {
+    @apply flex flex-col;
+  }
+  
+  .app-title {
+    @apply text-lg font-bold text-primary-900;
+  }
+  
+  .connection-status {
+    @apply flex items-center gap-1.5 text-xs;
+  }
+  
+  .status-indicator {
+    @apply w-2 h-2 rounded-full;
+  }
+  
+  .status-indicator.connected {
+    @apply bg-green-500;
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+  }
+  
+  .status-indicator.disconnected {
+    @apply bg-red-500;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+  
+  .status-text {
+    @apply text-gray-600;
+  }
+  
+  .time-display {
+    @apply text-sm font-medium text-primary-700 bg-primary-50 px-3 py-1 rounded-full;
+  }
+  
+  /* Content Container */
+  .content-container {
+    @apply flex flex-col gap-4;
+  }
+  
+  /* User Info Card */
+  .user-info-card {
+    @apply flex items-center gap-4 p-4 rounded-xl bg-white/60 border border-primary-100 shadow-sm;
+  }
+  
+  .user-avatar {
+    @apply flex-shrink-0;
+  }
+  
+  .avatar-image {
+    @apply w-14 h-14 rounded-full object-cover border-2 border-primary-200;
+  }
+  
+  .avatar-placeholder {
+    @apply w-14 h-14 rounded-full bg-primary-600 text-white flex items-center justify-center text-lg font-bold;
+  }
+  
+  .user-details {
+    @apply flex-1 min-w-0;
+  }
+  
+  .user-name {
+    @apply text-lg font-bold text-primary-900 truncate;
+  }
+  
+  .user-email {
+    @apply text-sm text-gray-600 truncate;
+  }
+  
+  .user-meta {
+    @apply flex items-center gap-3 mt-1;
+  }
+  
+  .user-id {
+    @apply text-xs text-gray-500;
+  }
+  
+  .plan-badge {
+    @apply text-xs px-2 py-0.5 rounded-full;
+  }
+  
+  .plan-badge.premium {
+    @apply bg-primary-100 text-primary-700;
+  }
+  
+  .plan-badge.free {
+    @apply bg-gray-100 text-gray-700;
+  }
+  
+  /* Signatures */
+  .signatures-container {
+    @apply mt-2;
+  }
+  
+  .signatures-title {
+    @apply text-lg font-bold text-primary-800 mb-3 px-1;
+  }
+  
+  .signatures-list {
+    @apply flex flex-col gap-3;
+  }
+  
+  .signature-card {
+    @apply p-3 rounded-xl bg-white/70 border border-gray-100 shadow-sm transition-all duration-300;
+  }
+  
+  .signature-card:hover {
+    @apply border-primary-200 bg-white/90 shadow;
+    transform: translateY(-1px);
+  }
+  
+  .signature-card.selected-card {
+    @apply border-2 border-primary-400 bg-primary-50/60;
+  }
+  
+  .signature-header {
+    @apply flex justify-between items-center;
+  }
+  
+  .signature-info {
+    @apply flex items-center gap-2;
+  }
+  
+  .signature-name {
+    @apply text-base font-medium text-primary-800;
+  }
+  
+  .active-badge {
+    @apply text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700;
+  }
+  
+  .signature-actions {
+    @apply flex items-center gap-1;
+  }
+  
+  .preview-button,
+  .select-button {
+    @apply p-1.5 rounded-full text-gray-600 hover:bg-primary-50 hover:text-primary-700 transition-colors;
+  }
+  
+  /* Signature Preview Styles */
+  .signature-preview {
+    @apply mt-3 pt-3 border-t border-gray-100 w-full;
+  }
+  
+  .signature-content-wrapper {
+    @apply bg-white/80 rounded-md p-3 overflow-visible w-full;
+    /* Ensure all content is visible */
+    max-width: 100%;
+    transform: scale(1);
+    transform-origin: top left;
+  }
+  
+  /* Fix any potential issues with signature content */
+  .signature-content-wrapper img {
+    @apply max-w-full h-auto;
+  }
+  
+  .signature-content-wrapper table {
+    @apply w-auto;
+    table-layout: auto;
+  }
+  
+  .signature-content-wrapper * {
+    @apply max-w-full;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  
+  .signature-content {
+    @apply text-sm overflow-hidden max-h-[200px] overflow-y-auto p-2 rounded-md bg-white/80;
+  }
+  
+  /* Empty State */
+  .empty-state {
+    @apply flex flex-col items-center justify-center py-8 px-4 rounded-xl bg-white/60 border border-gray-100;
+  }
+  
+  .empty-state-icon {
+    @apply text-primary-300 mb-4;
+  }
+  
+  .empty-state-text {
+    @apply text-gray-600 text-center;
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    @apply flex gap-3 mt-4;
+  }
+  
+  .action-button {
+    @apply flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium transition-all duration-200;
+  }
+  
+  .refresh-button {
+    @apply bg-primary-600 text-white hover:bg-primary-700 shadow-sm hover:shadow;
+  }
+  
+  .clear-button {
+    @apply bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 shadow-sm hover:shadow;
+  }
+  
+  /* Login Prompt */
+  .login-prompt-container {
+    @apply min-h-[500px] max-w-md mx-auto glass-container flex items-center justify-center p-6 animate-fade-in;
+  }
+  
+  .login-prompt-content {
+    @apply flex flex-col items-center text-center max-w-sm;
+  }
+  
+  .login-icon {
+    @apply text-primary-400 mb-4;
+  }
+  
+  .login-title {
+    @apply text-xl font-bold text-primary-900 mb-2;
+  }
+  
+  .login-description {
+    @apply text-gray-600 mb-6;
+  }
+  
+  .login-steps {
+    @apply flex flex-col gap-3 w-full mb-6;
+  }
+  
+  .login-step {
+    @apply flex items-center gap-3 p-3 rounded-lg bg-white/80 border border-gray-100;
+  }
+  
+  .step-number {
+    @apply w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-medium text-sm;
+  }
+  
+  .step-text {
+    @apply text-sm text-gray-700;
+  }
+  
+  .connect-button {
+    @apply w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-primary-600 text-white font-medium hover:bg-primary-700 transition-all duration-200 shadow-sm hover:shadow;
+  }
+  
+  /* Error Alert */
+  .error-alert {
+    @apply flex items-center gap-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 mb-4 animate-fade-in;
+  }
+  
+  .error-icon {
+    @apply text-red-500 flex-shrink-0;
+  }
+  
+  .error-content {
+    @apply flex-1 min-w-0;
+  }
+  
+  .error-message {
+    @apply text-sm;
+  }
+  
+  .error-dismiss {
+    @apply text-red-400 hover:text-red-600 flex-shrink-0;
+  }
+  
+  /* Toast */
+  .toast-container {
+    @apply fixed top-4 right-4 left-4 flex items-center gap-3 p-3 rounded-xl shadow-md z-50;
+  }
+  
+  .toast-container.success {
+    @apply bg-green-50 border border-green-200 text-green-800;
+  }
+  
+  .toast-container.info {
+    @apply bg-blue-50 border border-blue-200 text-blue-800;
+  }
+  
+  .toast-container.error {
+    @apply bg-red-50 border border-red-200 text-red-800;
+  }
+  
+  .toast-icon {
+    @apply flex-shrink-0;
+  }
+  
+  .toast-message {
+    @apply text-sm font-medium;
+  }
+  
+  /* Loader */
+  .loader {
+    @apply w-12 h-12 rounded-full border-4 border-primary-100;
+    border-top-color: theme("colors.primary.600");
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  

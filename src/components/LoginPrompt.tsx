@@ -1,64 +1,111 @@
-import React from 'react';
+"use client";
 
 interface LoginPromptProps {
   onRefresh: () => void;
 }
 
-const LoginPrompt: React.FC<LoginPromptProps> = ({ onRefresh }) => {
+const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
+  const openUrl = (url: string) => {
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
+      chrome.tabs.create({ url });
+    } 
+  };
   return (
-    <div className="container mx-auto p-4 max-w-md">
-      <div className="flex justify-between items-center mb-4">
-        <div>
-          <h1 className="text-xl font-bold text-gray-800">SyncSignature</h1>
-          <p className="text-xs text-gray-500">Manage your email signatures</p>
+    <div className="login-prompt-container min-w-[350px] min-h-[500px]">
+      <div className="login-prompt-content gap-2">
+        <div className="login-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            <circle cx="12" cy="16" r="1" />
+          </svg>
         </div>
-        <div className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-          Disconnected
-        </div>
-      </div>
-      
-      <div className="bg-white rounded-lg shadow p-6 text-center">
-        <svg 
-          className="mx-auto h-12 w-12 text-gray-400 mb-3" 
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-        </svg>
-        
-        <h2 className="text-lg font-medium text-gray-900 mb-2">Not connected</h2>
-        <p className="text-gray-500 mb-4">
-          Please log in to your SyncSignature account to manage your signatures.
+        <h2 className="login-title">Not Connected</h2>
+        <p className="login-description">
+          Please log in to SyncSignature in your browser first, then click the
+          button below to connect.
         </p>
-        
-        <div className="space-y-3">
-          <a 
-            href="http://localhost:3000" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded transition-colors"
-          >
-            Log in via localhost:3000
-          </a>
-          
-          <a 
-            href="https://app.syncsignature.com" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full py-2 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded transition-colors"
-          >
-            Log in via app.syncsignature.com
-          </a>
-          
-          <button
-            onClick={onRefresh}
-            className="w-full py-2 px-4 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded transition-colors"
-          >
-            I've logged in (Refresh)
+        <div className="login-steps">
+          <div className="login-step">
+            <div className="step-number">1</div>
+            <div className="step-text">Navigate to app.syncsignature.com</div>
+          </div>
+          <div className="login-step">
+            <div className="step-number">2</div>
+            <div className="step-text">Log in to your account</div>
+          </div>
+          <div className="login-step">
+            <div className="step-number">3</div>
+            <div className="step-text">Return here and click Connect</div>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 w-full gap-2">
+          <button className="connect-button " onClick={() => openUrl('https://app.syncsignature.com/auth/login')}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span>Login</span>
+          </button>
+          <button className="connect-button" onClick={() => openUrl('https://app.syncsignature.com/auth/signup')}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+              <line x1="23" y1="11" x2="17" y2="11" />
+            </svg>
+            <span>Register</span>
           </button>
         </div>
+
+        <button className="connect-button" onClick={onRefresh}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+          </svg>
+          <span>Connect {" "}<span>({" "}I am logged in{" "})</span> </span>
+        </button>
       </div>
     </div>
   );

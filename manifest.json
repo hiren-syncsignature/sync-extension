@@ -4,25 +4,31 @@
   "version": "1.0.0",
   "description": "Design, update, and install email signatures automatically for everyone on your team",
   "action": {
-    "default_popup": "index.html"    
+    "default_popup": "index.html"
+  }, 
+  "icons": {
+    "16": "16_16.png",
+    "32": "32_32.png",
+    "64": "64_64.png",
+    "128": "128_128.png"
   },
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": [
     "https://mail.google.com/*",
     "http://localhost:3000/*",
-    "http://localhost:4000/*",
+    "https://server.dev.syncsignature.com/*",
     "https://app.syncsignature.com/*"
   ],
   "background": {
     "service_worker": "src/background/index.ts",
     "type": "module"
   },
-  "options_page" : "src/optionsPage/optionsPage.html",
+  "options_page": "src/optionsPage/optionsPage.html",
   "content_scripts": [
     {
       "matches": [
-        "https://mail.google.com/*", 
-        "http://localhost:3000/*", 
+        "https://mail.google.com/*",
+        "http://localhost:3000/*",
         "https://app.syncsignature.com/*"
       ],
       "js": ["src/content/index.ts"]

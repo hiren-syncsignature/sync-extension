@@ -1,25 +1,31 @@
-import React from 'react';
+
 
 interface HeaderProps {
-  isConnected: boolean;
+  isConnected: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ isConnected }) => {
+const Header = ({ isConnected }: HeaderProps) => {
   return (
-    <div className="flex justify-between items-center mb-4">
-      <div>
-        <h1 className="text-xl font-bold text-gray-800">SyncSignature</h1>
-        <p className="text-xs text-gray-500">Manage your email signatures</p>
+    <header className="header-container">
+      <div className="logo-container">
+        <div className="logo">
+          <img
+            width="24"
+            height="24"
+            src="32x32.jpg"
+          />
+        </div>
+        <div className="logo-text">
+          <h1 className="app-title">SyncSignature</h1>
+          <div className="connection-status">
+            <span className={`status-indicator ${isConnected ? "connected" : "disconnected"}`}></span>
+            <span className="status-text">{isConnected ? "Connected" : "Disconnected"}</span>
+          </div>
+        </div>
       </div>
-      <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-        isConnected 
-          ? 'bg-green-100 text-green-800' 
-          : 'bg-red-100 text-red-800'
-      }`}>
-        {isConnected ? 'Connected' : 'Disconnected'}
-      </div>
-    </div>
-  );
-};
+    </header>
+  )
+}
 
-export default Header;
+export default Header
+

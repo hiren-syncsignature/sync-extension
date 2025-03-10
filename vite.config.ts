@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { crx } from '@crxjs/vite-plugin'
-import manifest from './manifest.json'
-import extensionReloader from './vite-extension-reloader';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { crx } from "@crxjs/vite-plugin";
+import manifest from "./manifest.json";
+import extensionReloader from "./vite-extension-reloader";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -10,16 +10,17 @@ export default defineConfig({
     react(),
     crx({ manifest }),
     extensionReloader({
-      browserType: 'chrome', 
-      extensionId: '',
+      browserType: "chrome",
+      extensionId: "",
       reloadOnHmr: true,
     }),
   ],
+  assetsInclude: ["**/*.png", "**/*.jpg", "**/*.svg"],
   server: {
     hmr: {
-      protocol: 'ws',
-      host: 'localhost',
+      protocol: "ws",
+      host: "localhost",
     },
     open: false,
   },
-})
+});

@@ -8,12 +8,12 @@ export async function fetchSignatures(userId: string): Promise<SignaturesRespons
     });
     
     const response = await fetch(
-      `http://localhost:4000/main-server/api/get-extension-signatures?${queryParams}`,
+      `${import.meta.env.VITE_APP_SERVER}?${queryParams}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json"
-        }
+        }, mode: "cors"
       }
     );
     
