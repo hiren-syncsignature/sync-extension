@@ -219,6 +219,7 @@
   /* Action Buttons */
   .action-buttons {
     @apply flex gap-3 mt-4;
+    border-radius: 100%;
   }
   
   .action-button {

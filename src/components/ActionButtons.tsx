@@ -1,33 +1,66 @@
-import React from 'react';
+import React from "react";
 
 interface ActionButtonsProps {
-  onRefresh: () => void;
-  onClear: () => void;
+  onRefresh?: () => void;
+  onClear?: () => void;
+  type: "refresh" | "logout";
 }
 
-const ActionButtons: React.FC<ActionButtonsProps> = ({ onRefresh, onClear }) => {
+const ActionButtons: React.FC<ActionButtonsProps> = ({
+  onRefresh,
+  onClear,
+  type,
+}) => {
   return (
-    <div className="action-buttons">
-      <button 
-        className="action-button refresh-button"
-        onClick={onRefresh}
+    <div className="action-buttons ">
+      <button
+        className="action-button refresh-button rounded-full p-2"
+        onClick={type === "refresh" ? onRefresh : onClear}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
-        </svg>
-        <span>Refresh</span>
+        {type === "refresh" ? (
+          <>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+            <span>Refresh Data</span>{" "}
+          </>
+        ) : (
+          <>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>{" "}
+          </>
+        )}
       </button>
-      <button 
+      {/* <button 
         className="action-button clear-button"
         onClick={onClear}
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-          <line x1="10" y1="11" x2="10" y2="17"/>
-          <line x1="14" y1="11" x2="14" y2="17"/>
-        </svg>
         <span>Clear Data</span>
-      </button>
+      </button> */}
     </div>
   );
 };

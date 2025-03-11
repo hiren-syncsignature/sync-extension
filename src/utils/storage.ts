@@ -1,8 +1,6 @@
 import { UserObject, Signature, SelectedSignature } from '../types/index';
 
-// Chrome storage wrapper functions with TypeScript support
 export const storage = {
-  // Local storage functions
   local: {
     get: <T>(key: string): Promise<T | undefined> => {
       return new Promise((resolve) => {
@@ -57,7 +55,6 @@ export const storage = {
   }
 };
 
-// Helper functions for specific storage operations
 export async function getUserObject(): Promise<UserObject | undefined> {
   return storage.local.get<UserObject>('userObject');
 }

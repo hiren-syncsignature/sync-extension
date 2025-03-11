@@ -1,10 +1,26 @@
-import type { UserObject } from "../types"
+import type { SelectedSignature, Signature, UserObject } from "../types";
+import ActionButtons from "./ActionButtons";
+import { handleClearData } from "../utils/actions";
 
 interface UserInfoProps {
-  user: UserObject
+  user: UserObject;
+  setUserObjectState: (user: UserObject | null) => void;
+  setSignaturesState: (signatures: Signature[] | null) => void;
+  setSelectedSignatureState: (signature: SelectedSignature | null) => void;
+  setStatusMessage: (
+    message: { text: string; type: "success" | "info" | "error" } | null
+  ) => void;
+  setError: (error: string | null) => void;
 }
 
-const UserInfo = ({ user }: UserInfoProps) => {
+const UserInfo = ({
+  user,
+  setUserObjectState,
+  setSignaturesState,
+  setSelectedSignatureState,
+  setStatusMessage,
+  setError
+}: UserInfoProps) => {
   // Generate initials from name
   const getInitials = (name: string) => {
     return name
@@ -12,27 +28,10 @@ const UserInfo = ({ user }: UserInfoProps) => {
       .map((part) => part[0])
       .join("")
       .toUpperCase()
-      .substring(0, 2)
-  }
-
-  const formatLastUpdated = (isoDateString: string) => {
-    const date = new Date(isoDateString);
-    
-    // Format options
-    const options = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    } as Intl.DateTimeFormatOptions;
-    
-    // Convert to readable string
-    return `Last updated: ${date.toLocaleDateString('en-US', options)}`;
+      .substring(0, 2);
   };
 
-
-  const initials = getInitials(user.name || "User")
+  const initials = getInitials(user.name || "User");
 
   return (
     <div className="user-info-card">
@@ -46,18 +45,15 @@ const UserInfo = ({ user }: UserInfoProps) => {
       <div className="user-details">
         <h2 className="user-name">{user.name || "Unknown User"}</h2>
         <p className="user-email">{user.email || "No email available"}</p>
-        <div className="user-meta">
-          <span className="user-id">{formatLastUpdated(user.workspaces[0].updatedAt)}...</span>
-          {/* <span className="user-plan">
-            <span className={`plan-badge ${user.plan === "premium" ? "premium" : "free"}`}>
-              {user.plan === "premium" ? "Premium" : "Free"}
-            </span>
-          </span> */}
-        </div>
+      </div>
+      <div className="pb-4">
+        <ActionButtons
+          onClear={() => handleClearData(setUserObjectState, setSignaturesState, setSelectedSignatureState, setStatusMessage, setError)}
+          type="logout"
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserInfo
-
+export default UserInfo;

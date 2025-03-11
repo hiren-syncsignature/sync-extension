@@ -1,6 +1,4 @@
-/**
- * Custom logger with colored output and timestamps
- */
+
 export const logger = {
     info: (message: string, ...args: unknown[]) => {
       console.log(

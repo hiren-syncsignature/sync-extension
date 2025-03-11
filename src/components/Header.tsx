@@ -12,7 +12,7 @@ const Header = ({ isConnected }: HeaderProps) => {
           <img
             width="24"
             height="24"
-            src="32x32.jpg"
+            src="32_32.png"
           />
         </div>
         <div className="logo-text">
