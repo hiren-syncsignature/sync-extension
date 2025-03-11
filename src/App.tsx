@@ -35,12 +35,11 @@ function App() {
     loadStoredData();
   }, []);
 
-  // Clear status message after 3 seconds
   useEffect(() => {
     if (statusMessage) {
       const timer = setTimeout(() => {
         setStatusMessage(null);
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
@@ -106,7 +105,7 @@ function App() {
     }
   }
 
-  async function handleRefresh() {
+  async function handleHardRefresh() {
     try {
       setIsLoading(true);
       setError(null);
@@ -165,7 +164,6 @@ function App() {
     }
   }
 
-
   async function handleSelectSignature(signature: Signature, index: number) {
     try {
       const newSelectedSignature: SelectedSignature = {
@@ -177,17 +175,17 @@ function App() {
       await setSelectedSignature(newSelectedSignature);
       setSelectedSignatureState(newSelectedSignature);
 
-      // setStatusMessage({
-      //   text: "Signature selected! It will be used in Gmail.",
-      //   type: "success",
-      // });
+      setStatusMessage({
+        text: "Signature selected! It will be used in Gmail.",
+        type: "success",
+      });
     } catch (err) {
       setError((err as Error).message || "Failed to select signature");
     }
   }
 
   if (!isLoading && !userObject) {
-    return <LoginPrompt onRefresh={handleRefresh} />;
+    return <LoginPrompt onRefresh={handleHardRefresh} />;
   }
 
   return (

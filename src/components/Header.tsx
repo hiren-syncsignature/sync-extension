@@ -1,4 +1,4 @@
-
+import ActionButtons from "./ActionButtons"
 
 interface HeaderProps {
   isConnected: boolean
@@ -6,7 +6,7 @@ interface HeaderProps {
 
 const Header = ({ isConnected }: HeaderProps) => {
   return (
-    <header className="header-container">
+    <header className="header-container flex items-center justify-between pl-8 pr-8">
       <div className="logo-container">
         <div className="logo">
           <img
@@ -22,6 +22,9 @@ const Header = ({ isConnected }: HeaderProps) => {
             <span className="status-text">{isConnected ? "Connected" : "Disconnected"}</span>
           </div>
         </div>
+      </div>
+      <div className="pb-4 ">
+      <ActionButtons type="refresh" />
       </div>
     </header>
   )
