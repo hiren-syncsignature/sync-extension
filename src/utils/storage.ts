@@ -27,11 +27,11 @@ export const storage = {
     }
   },
   
-  // Sync storage functions
+  // Sync storage functions (using local storage under the hood to avoid quota issues)
   sync: {
     get: <T>(key: string): Promise<T | undefined> => {
       return new Promise((resolve) => {
-        chrome.storage.sync.get([key], (result) => {
+        chrome.storage.local.get([key], (result) => {
           resolve(result[key] as T);
         });
       });
@@ -39,7 +39,7 @@ export const storage = {
     
     set: <T>(key: string, value: T): Promise<void> => {
       return new Promise((resolve) => {
-        chrome.storage.sync.set({ [key]: value }, () => {
+        chrome.storage.local.set({ [key]: value }, () => {
           resolve();
         });
       });
@@ -47,7 +47,7 @@ export const storage = {
     
     remove: (key: string): Promise<void> => {
       return new Promise((resolve) => {
-        chrome.storage.sync.remove(key, () => {
+        chrome.storage.local.remove(key, () => {
           resolve();
         });
       });

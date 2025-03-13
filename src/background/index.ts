@@ -2,11 +2,11 @@ import { setUserObject, setSignatures, setSignaturesTimestamp, getSelectedSignat
 import { fetchSignatures } from '../utils/api';
 // import { UserObject } from '../types/index';
 import { getUserFromTab } from '../utils/messaging';
-import { logger } from '../utils/logger';
+// import { logger } from '../utils/logger';
 
 // Listen for extension installation
 chrome.runtime.onInstalled.addListener(() => {
-  logger.info('SyncSignature extension installed!');
+  // logger.info('SyncSignature extension installed!');
   
   // Wait a bit to make sure everything is initialized
   setTimeout(() => {
@@ -20,7 +20,7 @@ async function checkForUserToken() {
     // Check if we already have a token
     const existingUser = await getUserObject();
     if (existingUser) {
-      logger.info('User token already exists in storage');
+      // logger.info('User token already exists in storage');
       
       // Refresh signatures if we have a token
       if (existingUser.id) {
@@ -52,7 +52,7 @@ async function checkForUserToken() {
             if (userObject) {
               // Save to extension storage
               await setUserObject(userObject);
-              logger.success('User object saved to extension storage from tab:', tab.id);
+              // logger.success('User object saved to extension storage from tab:', tab.id);
               
               // After getting the token, fetch signatures
               if (userObject.id) {
@@ -65,20 +65,20 @@ async function checkForUserToken() {
           
 
         } catch (e) {
-          logger.error('Error extracting user token from tab:', tab.id, e);
+          // logger.error('Error extracting user token from tab:', tab.id, e);
         }
       }
     } else {
-      logger.info('No compatible tabs found to extract user token');
+      // logger.info('No compatible tabs found to extract user token');
     }
   } catch (error) {
-    logger.error('Error in checkForUserToken:', error);
+    // logger.error('Error in checkForUserToken:', error);
   }
 }
 
 // Function to fetch and store signatures
 async function fetchAndStoreSignatures(userId: string) {
-  logger.info('Fetching signatures for user:', userId);
+  // logger.info('Fetching signatures for user:', userId);
   
   try {
     const data = await fetchSignatures(userId);
@@ -87,7 +87,7 @@ async function fetchAndStoreSignatures(userId: string) {
       // Store all signatures
       await setSignatures(data.html);
       await setSignaturesTimestamp(Date.now());
-      logger.success('Signatures saved to storage:', data.html.length);
+      // logger.success('Signatures saved to storage:', data.html.length);
       
       // If no signature is selected yet, set the first one as default
       const selectedSignature = await getSelectedSignature();
@@ -97,13 +97,13 @@ async function fetchAndStoreSignatures(userId: string) {
           content: data.html[0].html,
           timestamp: Date.now()
         });
-        logger.info('Default signature set to first signature');
+        // logger.info('Default signature set to first signature');
       }
     } else {
-      logger.warn('No signatures found or invalid response format');
+      // logger.warn('No signatures found or invalid response format');
     }
   } catch (error) {
-    logger.error('Failed to fetch signatures:', error);
+    // logger.error('Failed to fetch signatures:', error);
   }
 }
 
@@ -123,7 +123,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
           // If token doesn't exist or has changed, update it
           if (!existingUser || existingUser.id !== userObject.id) {
             await setUserObject(userObject);
-            logger.info('User token updated after login detection');
+            // logger.info('User token updated after login detection');
             
             // Fetch signatures with the new token
             if (userObject.id) {
@@ -132,7 +132,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
           }
         }
       } catch (e) {
-        logger.error('Error processing login detection:', e);
+        // logger.error('Error processing login detection:', e);
       }
     }, 1500);
   }
@@ -152,7 +152,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           sendResponse({ success: false, error: "No user found" });
         }
       } catch (error) {
-        logger.error('Error in fetchSignatures message handler:', error);
+        // logger.error('Error in fetchSignatures message handler:', error);
         sendResponse({ success: false, error: String(error) });
       }
     })();

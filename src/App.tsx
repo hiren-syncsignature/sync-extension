@@ -190,8 +190,13 @@ function App() {
 
   return (
     <div className="glass-container min-h-[500px] min-w-[450px] max-w-md mx-auto overflow-hidden animate-fade-in ">
-      <Header isConnected={!!userObject} />
-
+      <Header
+        isConnected={!!userObject}
+        setSignaturesState={setSignaturesState}
+        setError={setError}
+        setStatusMessage={setStatusMessage}
+        setIsLoading={setIsLoading}
+      />
       {error && <ErrorAlert message={error} onDismiss={() => setError(null)} />}
 
       {statusMessage && (
@@ -216,7 +221,7 @@ function App() {
               setStatusMessage={setStatusMessage}
               setError={setError}
             />
-          )}  
+          )}
 
           {signatures && signatures.length > 0 ? (
             <SignatureList
@@ -246,7 +251,7 @@ function App() {
                 </svg>
               </div>
               <p className="empty-state-text">
-                No signatures found. Please ensure you're logged in.
+                No signatures found.
               </p>
             </div>
           )}

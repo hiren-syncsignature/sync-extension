@@ -21,8 +21,6 @@ const SignatureList = ({
 
 
   useEffect(() => {
-    // Only select first signature if no signature is currently selected
-    // and there's at least one signature available
     const same = isSameSignatureContent(signatures[0]?.html, selectedSignature?.content)
 
     if(same) {
@@ -31,7 +29,7 @@ const SignatureList = ({
   
     onSelectSignature(signatures[0], 0);
 
-  }, [onSelectSignature, selectedSignature?.content, signatures]); // Empty dependency array ensures this only runs once on mount
+  }, [onSelectSignature, selectedSignature?.content, signatures]); 
 
 
   return (

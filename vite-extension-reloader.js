@@ -33,7 +33,7 @@ export default function viteExtensionReloader(options = {}) {
   const reloadExtension = () => {
     const command = COMMAND_MAP[browserType];
     
-    console.log('\n🔄 Extension change detected. Reloading...');
+    // console.log('\n🔄 Extension change detected. Reloading...');
     
     exec(command, (error, stdout, stderr) => {
       if (error) {
@@ -43,7 +43,7 @@ export default function viteExtensionReloader(options = {}) {
       if (stderr) {
         console.error(`⚠️ Reload stderr: ${stderr}`);
       }
-      console.log(`✅ Extension reloaded successfully at ${new Date().toLocaleTimeString()}`);
+      // console.log(`✅ Extension reloaded successfully at ${new Date().toLocaleTimeString()}`);
       if (stdout) console.log(stdout);
     });
   };
