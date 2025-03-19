@@ -97,4 +97,13 @@
   }
 }
 
+@layer utilities {
+  .signature-content-wrapper * {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+}
+
+
 

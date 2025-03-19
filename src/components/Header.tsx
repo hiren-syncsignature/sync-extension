@@ -2,6 +2,7 @@ import ActionButtons from "./ActionButtons";
 import { getUserObject, setSignatures } from "../utils/storage";
 import { fetchSignatures } from "../utils/api";
 import { Signature } from "../types";
+import { useEffect } from "react";
 
 interface HeaderProps {
   isConnected: boolean;
@@ -21,7 +22,12 @@ const Header = ({
   setStatusMessage,
   setIsLoading
 }: HeaderProps) => {
-  
+  useEffect(() => { 
+    const handleRefreshSignatures_inside = async () => { 
+      await handleRefreshSignatures();
+    }
+    handleRefreshSignatures_inside();
+  }, [])
   const handleRefreshSignatures = async () => {
     try {
       // console.log("Starting refresh process");

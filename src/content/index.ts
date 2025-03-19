@@ -75,7 +75,7 @@ function insertSignature(composeElement: HTMLElement, signature: string): void {
   composeElement.innerHTML = "";
   composeElement.insertAdjacentHTML(
     "beforeend",
-    `<br><br><br><br><br><br><div class="SyncSignature" style="margin-top: 10px;">${signature}</div>`
+    `<br><br><br><div class="SyncSignature" style="margin-top: 10px;">${signature}</div>`
   );
 
   composeElement.setAttribute("data-signature-inserted", "true");

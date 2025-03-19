@@ -19,18 +19,18 @@ const SignatureList = ({
     return sig1 === sig2;
   };
 
-
   useEffect(() => {
-    const same = isSameSignatureContent(signatures[0]?.html, selectedSignature?.content)
+    const same = isSameSignatureContent(
+      signatures[0]?.html,
+      selectedSignature?.content
+    );
 
-    if(same) {
+    if (same) {
       return;
     }
-  
+
     onSelectSignature(signatures[0], 0);
-
-  }, [onSelectSignature, selectedSignature?.content, signatures]); 
-
+  }, [onSelectSignature, selectedSignature?.content, signatures]);
 
   return (
     <div className="signatures-container">
@@ -93,9 +93,9 @@ const SignatureList = ({
             </div>
 
             {/* Signature preview is always visible */}
-            <div className="signature-preview">
+            <div className="signature-preview w-full overflow-hidden rounded border border-gray-200 bg-white p-4 shadow-sm">
               <div
-                className="signature-content-wrapper"
+                className="signature-content-wrapper max-w-full font-sans text-sm leading-6 text-gray-700"
                 dangerouslySetInnerHTML={{ __html: signature.html }}
               />
             </div>

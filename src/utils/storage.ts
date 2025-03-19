@@ -54,7 +54,7 @@ export const storage = {
     }
   }
 };
-
+//ccoodgimjikgdlkimcpflophflodmhpo
 export async function getUserObject(): Promise<UserObject | undefined> {
   return storage.local.get<UserObject>('userObject');
 }

@@ -33,5 +33,9 @@
       ],
       "js": ["src/content/index.ts"]
     }
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["installed.json"],
+    "matches": ["https://app.syncsignature.com/*", "http://localhost:3000/*"]
+  }]
 }
