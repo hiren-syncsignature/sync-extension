@@ -37,6 +37,6 @@ export async function handleRefresh(
     }
   } catch (err) {
     setError('Looks like server is busy please try again');
-    console.error('Error fetching signatures:', err);
+    // console.error('Error fetching signatures:', err);
   }
 }

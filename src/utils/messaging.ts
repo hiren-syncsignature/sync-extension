@@ -32,7 +32,7 @@ export async function getUserFromTab(
 
     // Check if we're on a compatible page
     if (
-      activeTab.url?.includes("localhost:3000") ||
+      activeTab.url?.includes("app.dev.syncsignature.com") ||
       activeTab.url?.includes("app.syncsignature.com")
     ) {
       const response = await sendMessageToTab<{
@@ -56,12 +56,12 @@ export async function getUserFromTab(
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     const activeTab = tabs[0];
     if (
-      activeTab.url?.includes("localhost:3000") ||
+      activeTab.url?.includes("app.dev.syncsignature.com") ||
       activeTab.url?.includes("app.syncsignature.com")
     ) {
       return null;
     }
-    console.error("Error getting user from tab:", error);
+    // console.error("Error getting user from tab:", error);
     return null;
   }
 }
@@ -76,7 +76,7 @@ export function safeParseJSON<T>(
   try {
     return JSON.parse(jsonString) as T;
   } catch (e) {
-    console.error("Failed to parse JSON:", e);
+    // console.error("Failed to parse JSON:", e);
     return fallback;
   }
 }

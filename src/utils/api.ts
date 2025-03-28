@@ -6,7 +6,7 @@ export async function fetchSignatures(userId: string): Promise<SignaturesRespons
       token: userId,
       platform: "chrome_extension"
     });
-    
+
     const response = await fetch(
       `${import.meta.env.VITE_APP_SERVER}?${queryParams}`,
       {
@@ -16,14 +16,14 @@ export async function fetchSignatures(userId: string): Promise<SignaturesRespons
         }, mode: "cors"
       }
     );
-    
+
     if (!response.ok) {
       throw new Error(`Request failed with status: ${response.status}`);
     }
-    
+
     return await response.json();
   } catch (error) {
-    console.error('Error fetching signatures:', error);
+    // console.error('Error fetching signatures:', error);
     return null;
   }
 }

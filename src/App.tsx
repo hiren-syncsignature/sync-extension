@@ -97,7 +97,7 @@ function App() {
       }
     } catch (err) {
       setError("Looks like server is busy please try again");
-      console.error("Error fetching signatures:", err);
+      // console.error("Error fetching signatures:", err);
       // // Still use cached signatures if available, even if outdated
       // if (storedSignatures && storedSignatures.length > 0) {
       //   setSignaturesState(storedSignatures);
@@ -117,7 +117,7 @@ function App() {
       const activeTab = tabs[0];
 
       if (
-        activeTab.url?.includes("localhost:3000") ||
+        activeTab.url?.includes("app.dev.syncsignature.com") ||
         activeTab.url?.includes("app.syncsignature.com")
       ) {
         chrome.tabs.sendMessage(
@@ -153,9 +153,7 @@ function App() {
           }
         );
       } else {
-        setError(
-          "Please navigate to localhost:3000 or app.syncsignature.com first"
-        );
+        setError("Please navigate to app.syncsignature.com first");
         setIsLoading(false);
       }
     } catch (err) {
@@ -250,9 +248,7 @@ function App() {
                   <path d="M10 9H8"></path>
                 </svg>
               </div>
-              <p className="empty-state-text">
-                No signatures found.
-              </p>
+              <p className="empty-state-text">No signatures found.</p>
             </div>
           )}
         </div>

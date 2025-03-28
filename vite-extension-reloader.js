@@ -37,11 +37,11 @@ export default function viteExtensionReloader(options = {}) {
     
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        console.error(`❌ Error reloading extension: ${error.message}`);
+        // console.error(`❌ Error reloading extension: ${error.message}`);
         return;
       }
       if (stderr) {
-        console.error(`⚠️ Reload stderr: ${stderr}`);
+        // console.error(`⚠️ Reload stderr: ${stderr}`);
       }
       // console.log(`✅ Extension reloaded successfully at ${new Date().toLocaleTimeString()}`);
       if (stdout) console.log(stdout);
