@@ -31,7 +31,7 @@ export async function getUserFromTab(
     const activeTab = tabs[0];
 
     // Check if we're on a compatible page
-    if (activeTab.url?.includes("app.syncsignature.com")) {
+    if (activeTab.url?.includes("app.dev.syncsignature.com")) {
       const response = await sendMessageToTab<{
         value?: string;
         error?: string;
@@ -52,7 +52,7 @@ export async function getUserFromTab(
   } catch (error) {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     const activeTab = tabs[0];
-    if (activeTab.url?.includes("app.syncsignature.com")) {
+    if (activeTab.url?.includes("app.dev.syncsignature.com")) {
       return null;
     }
     // console.error("Error getting user from tab:", error);

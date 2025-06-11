@@ -38,7 +38,7 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
         <div className="login-steps">
           <div className="login-step">
             <div className="step-number">1</div>
-            <div className="step-text">Navigate to app.syncsignature.com</div>
+            <div className="step-text">Navigate to app.dev.syncsignature.com</div>
           </div>
           <div className="login-step">
             <div className="step-number">2</div>
@@ -52,7 +52,7 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
         <div className="grid grid-cols-2 w-full gap-2">
           <button
             className="connect-button "
-            onClick={() => openUrl("https://app.syncsignature.com/auth/login")}
+            onClick={() => openUrl("https://app.dev.syncsignature.com/auth/login")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +73,7 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
           </button>
           <button
             className="connect-button"
-            onClick={() => openUrl("https://app.syncsignature.com/auth/signup")}
+            onClick={() => openUrl("https://app.dev.syncsignature.com/auth/signup")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

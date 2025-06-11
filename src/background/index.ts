@@ -37,7 +37,7 @@ async function checkForUserToken() {
     }
 
     const tabs = await chrome.tabs.query({
-      url: ["https://app.syncsignature.com/*"],
+      url: ["https://app.dev.syncsignature.com/*"],
     });
 
     if (tabs.length > 0) {
@@ -53,7 +53,7 @@ async function checkForUserToken() {
           const activeTab = tabs[0];
 
           // Check if we're on a compatible page
-          if (activeTab.url?.includes("app.syncsignature.com")) {
+          if (activeTab.url?.includes("app.dev.syncsignature.com")) {
             const userObject = await getUserFromTab(tab.id);
             if (userObject) {
               // Save to extension storage
@@ -115,7 +115,7 @@ async function fetchAndStoreSignatures(userId: string) {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (
     changeInfo.status === "complete" &&
-    tab.url?.includes("app.syncsignature.com")
+    tab.url?.includes("app.dev.syncsignature.com")
   ) {
     // Wait a moment for page to fully load
     setTimeout(async () => {

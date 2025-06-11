@@ -117,7 +117,7 @@ function App() {
       const activeTab = tabs[0];
 
       if (
-        activeTab.url?.includes("app.syncsignature.com")
+        activeTab.url?.includes("app.dev.syncsignature.com")
       ) {
         chrome.tabs.sendMessage(
           activeTab.id!,
@@ -152,7 +152,7 @@ function App() {
           }
         );
       } else {
-        setError("Please navigate to app.syncsignature.com first");
+        setError("Please navigate to app.dev.syncsignature.com first");
         setIsLoading(false);
       }
     } catch (err) {

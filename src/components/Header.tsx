@@ -83,7 +83,7 @@ const Header = ({
           // console.log("Invalid API response format");
           if (data) {
             setError(
-              "No signature found please add one from app.syncsignature.com"
+              "No signature found please add one from app.dev.syncsignature.com"
             );
             return;
           }
