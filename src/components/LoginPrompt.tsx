@@ -6,9 +6,9 @@ interface LoginPromptProps {
 
 const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
   const openUrl = (url: string) => {
-    if (typeof chrome !== 'undefined' && chrome.tabs) {
+    if (typeof chrome !== "undefined" && chrome.tabs) {
       chrome.tabs.create({ url });
-    } 
+    }
   };
   return (
     <div className="login-prompt-container min-w-[350px] min-h-[500px]">
@@ -50,7 +50,10 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
           </div>
         </div>
         <div className="grid grid-cols-2 w-full gap-2">
-          <button className="connect-button " onClick={() => openUrl('https://app.syncsignature.com/auth/login')}>
+          <button
+            className="connect-button "
+            onClick={() => openUrl("https://app.syncsignature.com/auth/login")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -68,7 +71,10 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
             </svg>
             <span>Login</span>
           </button>
-          <button className="connect-button" onClick={() => openUrl('https://app.syncsignature.com/auth/signup')}>
+          <button
+            className="connect-button"
+            onClick={() => openUrl("https://app.syncsignature.com/auth/signup")}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -104,7 +110,9 @@ const LoginPrompt = ({ onRefresh }: LoginPromptProps) => {
             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
           </svg>
-          <span>Connect {" "}<span>({" "}I am logged in{" "})</span> </span>
+          <span>
+            Connect <span>( I am logged in )</span>{" "}
+          </span>
         </button>
       </div>
     </div>

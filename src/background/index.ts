@@ -1,7 +1,14 @@
-import { setUserObject, setSignatures, setSignaturesTimestamp, getSelectedSignature, setSelectedSignature, getUserObject } from '../utils/storage';
-import { fetchSignatures } from '../utils/api';
+import {
+  setUserObject,
+  setSignatures,
+  setSignaturesTimestamp,
+  getSelectedSignature,
+  setSelectedSignature,
+  getUserObject,
+} from "../utils/storage";
+import { fetchSignatures } from "../utils/api";
 // import { UserObject } from '../types/index';
-import { getUserFromTab } from '../utils/messaging';
+import { getUserFromTab } from "../utils/messaging";
 // import { logger } from '../utils/logger';
 
 // Listen for extension installation
@@ -30,10 +37,7 @@ async function checkForUserToken() {
     }
 
     const tabs = await chrome.tabs.query({
-      url: [
-        'https://app.dev.syncsignature.com/*',
-        'https://app.syncsignature.com/*'
-      ]
+      url: ["https://app.syncsignature.com/*"],
     });
 
     if (tabs.length > 0) {
@@ -42,11 +46,14 @@ async function checkForUserToken() {
 
         try {
           // Try to get user from tab
-          const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+          const tabs = await chrome.tabs.query({
+            active: true,
+            currentWindow: true,
+          });
           const activeTab = tabs[0];
 
           // Check if we're on a compatible page
-          if (activeTab.url?.includes("app.dev.syncsignature.com") || activeTab.url?.includes('app.syncsignature.com')) {
+          if (activeTab.url?.includes("app.syncsignature.com")) {
             const userObject = await getUserFromTab(tab.id);
             if (userObject) {
               // Save to extension storage
@@ -61,8 +68,6 @@ async function checkForUserToken() {
               break; // Stop after finding a valid token
             }
           }
-
-
         } catch (e) {
           // logger.error('Error extracting user token from tab:', tab.id, e);
         }
@@ -94,7 +99,7 @@ async function fetchAndStoreSignatures(userId: string) {
         await setSelectedSignature({
           index: 0,
           content: data.html[0].html,
-          timestamp: Date.now()
+          timestamp: Date.now(),
         });
         // logger.info('Default signature set to first signature');
       }
@@ -108,8 +113,10 @@ async function fetchAndStoreSignatures(userId: string) {
 
 // Listen for tab updates to detect when user logs in
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === 'complete' &&
-    (tab.url?.includes("app.dev.syncsignature.com") || tab.url?.includes('app.syncsignature.com'))) {
+  if (
+    changeInfo.status === "complete" &&
+    tab.url?.includes("app.syncsignature.com")
+  ) {
     // Wait a moment for page to fully load
     setTimeout(async () => {
       try {

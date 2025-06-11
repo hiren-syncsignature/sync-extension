@@ -16,8 +16,6 @@
   "host_permissions": [
     "https://mail.google.com/*",
     "https://server.syncsignature.com/*",
-    "https://server.dev.syncsignature.com/*",
-    "https://app.dev.syncsignature.com/*",
     "https://app.syncsignature.com/*"
   ],
   "background": {
@@ -28,8 +26,7 @@
     {
       "matches": [
         "https://mail.google.com/*",
-        "https://app.syncsignature.com/*",
-        "https://app.dev.syncsignature.com/*"
+        "https://app.syncsignature.com/*"
       ],
       "js": ["src/content/index.ts"]
     }
@@ -38,8 +35,7 @@
     {
       "resources": ["installed.json"],
       "matches": [
-        "https://app.syncsignature.com/*",
-        "https://app.dev.syncsignature.com/*"
+        "https://app.syncsignature.com/*"
       ]
     }
   ]
