@@ -8,7 +8,7 @@ export async function fetchSignatures(userId: string): Promise<SignaturesRespons
     });
 
     const response = await fetch(
-      `${import.meta.env.VITE_APP_SERVER}?${queryParams}`,
+      `${import.meta.env.VITE_APP_SERVER_DEV}?${queryParams}`,
       {
         method: "GET",
         headers: {

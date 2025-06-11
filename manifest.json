@@ -15,7 +15,7 @@
   "permissions": ["activeTab", "storage"],
   "host_permissions": [
     "https://mail.google.com/*",
-    "https://server.syncsignature.com/*",
+    "https://server.dev.syncsignature.com/*",
     "https://app.dev.syncsignature.com/*"
   ],
   "background": {
