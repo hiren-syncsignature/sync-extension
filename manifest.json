@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "SyncSignature Email Signature Manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SyncSignature offers email signature management software for businesses to standardize company email signatures.",
   "action": {
     "default_popup": "index.html"
