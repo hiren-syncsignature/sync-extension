@@ -186,7 +186,7 @@ function App() {
   }
 
   return (
-    <div className="glass-container min-h-[500px] min-w-[400px] max-w-md mx-auto overflow-hidden animate-fade-in ">
+    <div className="glass-container min-h-[500px] min-w-[400px] w-[600px] mx-auto overflow-hidden animate-fade-in ">
       <Header
         isConnected={!!userObject}
         setSignaturesState={setSignaturesState}

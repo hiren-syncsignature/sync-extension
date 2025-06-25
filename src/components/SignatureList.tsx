@@ -5,7 +5,9 @@ interface SignatureListProps {
   signatures: Signature[];
   selectedSignature: SelectedSignature | null;
   onSelectSignature: (signature: Signature, index: number) => void;
-  setStatusMessage?: (message: { text: string; type: "success" | "info" | "error" } | null) => void;
+  setStatusMessage?: (
+    message: { text: string; type: "success" | "info" | "error" } | null
+  ) => void;
 }
 
 const SignatureList = ({
@@ -25,45 +27,43 @@ const SignatureList = ({
     try {
       await navigator.clipboard.write([
         new ClipboardItem({
-          'text/html': new Blob([signature.html], { type: 'text/html' })
-        })
+          "text/html": new Blob([signature.html], { type: "text/html" }),
+        }),
       ]);
-      
+
       // Show toast notification
       setStatusMessage?.({
         text: "Signature copied to clipboard!",
-        type: "success"
+        type: "success",
       });
-      
     } catch (error) {
       setStatusMessage?.({
         text: "Failed to copy signature",
-        type: "error"
+        type: "error",
       });
     }
   };
 
   const handleDownloadSignature = (signature: Signature, index: number) => {
     try {
-      const blob = new Blob([signature.html], { type: 'text/html' });
+      const blob = new Blob([signature.html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
       link.download = `signature-${index + 1}.html`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       setStatusMessage?.({
         text: "Signature downloaded successfully!",
-        type: "success"
+        type: "success",
       });
-      
     } catch (error) {
       setStatusMessage?.({
         text: "Failed to download signature",
-        type: "error"
+        type: "error",
       });
     }
   };
@@ -82,7 +82,7 @@ const SignatureList = ({
   }, [onSelectSignature, selectedSignature?.content, signatures]);
 
   return (
-    <div className="signatures-container">
+    <div className="signatures-container w-full">
       <div className="signatures-list">
         {signatures.map((signature, index) => (
           <div
@@ -189,26 +189,15 @@ const SignatureList = ({
             </div>
 
             {/* Signature preview is always visible */}
-            <div className="signature-preview w-full overflow-hidden rounded border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="signature-preview w-full overflow-hidden rounded border border-gray-200 bg-white p-4 shadow-sm flex justify-center items-center">
               <div
                 className="signature-content-wrapper max-w-full font-sans text-sm leading-6 text-gray-700"
                 style={{
-                  fontSize: '11px',
-                  lineHeight: '1.3'
+                  fontSize: "11px",
+                  lineHeight: "1.3",
                 }}
-                dangerouslySetInnerHTML={{ 
-                  __html: signature.html.replace(
-                    /width="?\d+(?:px)?"?/gi, 'width="100%"'
-                  ).replace(
-                    /style="([^"]*?)width:\s*\d+(?:px)?([^"]*?)"/gi, 
-                    'style="$1max-width: 100%$2"'
-                  ).replace(
-                    /<table/gi, 
-                    '<table style="width: 100% !important; max-width: 100% !important; table-layout: fixed !important;"'
-                  ).replace(
-                    /<img([^>]*?)>/gi,
-                    '<img$1 style="max-width: 60px !important; height: auto !important;">'
-                  )
+                dangerouslySetInnerHTML={{
+                  __html: signature.html,
                 }}
               />
             </div>
