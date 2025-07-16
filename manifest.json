@@ -16,7 +16,9 @@
   "host_permissions": [
     "https://mail.google.com/*",
     "https://server.syncsignature.com/*",
-    "https://app.syncsignature.com/*"
+    "https://app.syncsignature.com/*",
+    "https://outlook.live.com/*",
+    "https://outlook.office.com/*"
   ],
   "background": {
     "service_worker": "src/background/index.ts",
@@ -26,7 +28,9 @@
     {
       "matches": [
         "https://mail.google.com/*",
-        "https://app.syncsignature.com/*"
+        "https://app.syncsignature.com/*",
+        "https://outlook.live.com/*",
+        "https://outlook.office.com/*"
       ],
       "js": ["src/content/index.ts"]
     }
@@ -34,9 +38,7 @@
   "web_accessible_resources": [
     {
       "resources": ["installed.json"],
-      "matches": [
-        "https://app.syncsignature.com/*"
-      ]
+      "matches": ["https://app.syncsignature.com/*"]
     }
   ]
 }

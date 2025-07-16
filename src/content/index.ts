@@ -1,158 +1,91 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectedSignature } from "../types/index";
 
-// console.log("SyncSignature content script loaded");
+console.log("✅ SyncSignature: Content script is active.");
 
-// Listen for messages from the popup or background script
-chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  // console.log("Content script received message:", request);
+// --- SELECTORS ---
+const GMAIL_SELECTOR = 'div[aria-label="Message Body"]';
+const OUTLOOK_SELECTOR = 'div[aria-label="Message body, press Alt+F10 to exit"]';
+const allComposeSelectors = [GMAIL_SELECTOR, OUTLOOK_SELECTOR].join(", ");
 
-  if (request.action === "getLocalStorageItem") {
-    try {
-      const value = localStorage.getItem(request.key);
-      sendResponse({ value: value });
-    } catch (e) {
-      sendResponse({
-        error: e instanceof Error ? e.toString() : "Unknown error",
-      });
-    }
-    return true; // Required for async response
-  } else if (request.action === "insertSignature") {
-    // console.log("Inserting signature:", request.signatureHtml);
-    sendResponse({ success: true });
-    return true;
-  }
-  return false;
-});
-
-// Set to track compose elements that have already been processed
 const processedComposeElements = new WeakSet<HTMLElement>();
 
-/**
- * Inserts the signature into the compose element
- */
+// --- CORE FUNCTIONS ---
+
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+  if (request.action === "getLocalStorageItem") { try { const value = localStorage.getItem(request.key); sendResponse({ value: value }); } catch (e) { sendResponse({ error: e instanceof Error ? e.toString() : "Unknown error", }); } return true; } else if (request.action === "insertSignature") { sendResponse({ success: true }); return true; } return false;
+});
+
 function insertSignature(composeElement: HTMLElement, signature: string): void {
-  let currentElement: HTMLElement | null = composeElement;
-  let topComposeElement: HTMLElement | null = null;
-
-  // Find the top-level compose element
-  while (currentElement) {
-    if (isComposeElement(currentElement)) {
-      topComposeElement = currentElement;
-    }
-    currentElement = currentElement.parentElement;
-  }
-
-  // Only process the top-level compose element
-  if (composeElement !== topComposeElement) {
-    // console.log("Skipping nested compose element (not topmost).");
-    return;
-  }
-
-  // Skip if already processed
-  if (processedComposeElements.has(composeElement)) {
-    // console.log("Compose element already processed. Skipping insertion.");
-    return;
-  }
-
-  // Skip if signature already inserted
-  if (composeElement.querySelector(".SyncSignature")) {
-    // console.log("Signature container already exists. Skipping insertion.");
-    processedComposeElements.add(composeElement);
-    return;
-  }
-
-  // Skip if data attribute indicates already inserted
-  if (composeElement.getAttribute("data-signature-inserted") === "true") {
-    processedComposeElements.add(composeElement);
-    return;
-  }
-
-  // console.log("Inserting signature into compose window");
+  // Final, successful insertion log.
+  console.log("%c✅ SyncSignature: Signature successfully inserted.", "color: green; font-weight: bold;", composeElement);
   composeElement.innerHTML = "";
-  composeElement.insertAdjacentHTML(
-    "beforeend",
-    `<br><br><br><div class="SyncSignature" style="margin-top: 10px;">${signature}</div>`
-  );
-
+  composeElement.insertAdjacentHTML("beforeend", `<br><br><br><div class="SyncSignature" style="margin-top: 10px;">${signature}</div>`);
   composeElement.setAttribute("data-signature-inserted", "true");
+}
+
+function tryInsertSignature(composeElement: HTMLElement): void {
+  // This is the most important check. If we've seen this element before, do nothing.
+  if (processedComposeElements.has(composeElement)) {
+    return;
+  }
+  
+  chrome.storage.local.get("selectedSignature", (data: { selectedSignature?: SelectedSignature }) => {
+    if (chrome.runtime.lastError) { 
+        console.error("❌ SyncSignature: Error retrieving signature from storage:", chrome.runtime.lastError); 
+        return; 
+    }
+    if (data.selectedSignature && data.selectedSignature.content) {
+      insertSignature(composeElement, data.selectedSignature.content);
+    } else {
+      console.warn("⚠️ SyncSignature: No valid signature was found in storage.");
+    }
+  });
+
+  // Mark this element as processed so we never touch it again.
   processedComposeElements.add(composeElement);
 }
 
-/**
- * Checks if the given node is the Gmail compose field
- */
-function isComposeElement(node: Node): node is HTMLElement {
-  return (
-    node instanceof HTMLElement &&
-    node.matches('div[aria-label="Message Body"]')
-  );
-}
-
-/**
- * Gets the saved signature and inserts it
- */
-function tryInsertSignature(composeElement: HTMLElement): void {
-  chrome.storage.local.get(
-    "selectedSignature",
-    (data: { selectedSignature?: SelectedSignature }) => {
-      if (chrome.runtime.lastError) {
-        // console.error(
-        //   "Error retrieving signature from storage:",
-        //   chrome.runtime.lastError
-        // );
-        return;
-      }
-
-      if (data.selectedSignature && data.selectedSignature.content) {
-        // console.log("Found saved signature:", data.selectedSignature);
-        insertSignature(composeElement, data.selectedSignature.content);
-      } else {
-        // console.log("No valid signature found in storage.");
-      }
+function findAndProcessComposeBox(elementToSearch: HTMLElement) {
+    if (elementToSearch.matches(allComposeSelectors)) {
+        tryInsertSignature(elementToSearch);
+    } else {
+        const composeFields = elementToSearch.querySelectorAll(allComposeSelectors);
+        composeFields.forEach(field => tryInsertSignature(field as HTMLElement));
     }
-  );
 }
 
-// Only run this code on Gmail
-if (window.location.hostname === "mail.google.com") {
-  // Wait for the page to load more fully
+// --- INITIALIZATION LOGIC ---
+const supportedHosts = ["mail.google.com", "outlook.live.com", "outlook.office.com"];
+
+if (supportedHosts.includes(window.location.hostname)) {
   setTimeout(() => {
-    // Create observer to watch for new compose windows
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof HTMLElement) {
-            if (isComposeElement(node)) {
-              // console.log("Compose element detected directly:", node);
-              tryInsertSignature(node);
-            } else {
-              // Look for compose fields in this subtree
-              const composeFields = (node as HTMLElement).querySelectorAll(
-                'div[aria-label="Message Body"]'
-              );
-              if (composeFields.length) {
-                composeFields.forEach((field: any) => {
-                  tryInsertSignature(field as HTMLElement);
-                });
-              }
-            }
+    const mainObserver = new MutationObserver((mutations) => {
+      const elementsToScan = new Set<HTMLElement>();
+      for (const mutation of mutations) {
+        if (mutation.type === 'childList') {
+          for (const node of mutation.addedNodes) {
+            if (node instanceof HTMLElement) elementsToScan.add(node);
           }
-        });
-      });
+        } else if (mutation.type === 'attributes') {
+          if (mutation.target instanceof HTMLElement) elementsToScan.add(mutation.target);
+        }
+      }
+      // This will now silently check all mutated elements.
+      elementsToScan.forEach(findAndProcessComposeBox);
     });
 
-    // Start observing the document
-    observer.observe(document.body, { childList: true, subtree: true });
+    mainObserver.observe(document.body, {
+      childList: true,
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['class', 'style']
+    });
 
-    // Check for existing compose fields
-    const existingComposeFields = document.querySelectorAll(
-      'div[aria-label="Message Body"]'
-    );
-    if (existingComposeFields.length) {
-      existingComposeFields.forEach((field) => {
-        tryInsertSignature(field as HTMLElement);
-      });
+    // Initial check on page load (runs once).
+    const existingComposeFields = document.querySelectorAll(allComposeSelectors);
+    if (existingComposeFields.length > 0) {
+      existingComposeFields.forEach((field) => tryInsertSignature(field as HTMLElement));
     }
-  }, 1000);
+  }, 1500);
 }
