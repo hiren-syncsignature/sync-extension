@@ -85,3 +85,14 @@ export async function getSelectedSignature(): Promise<SelectedSignature | undefi
 export async function setSelectedSignature(selectedSignature: SelectedSignature): Promise<void> {
   return storage.sync.set('selectedSignature', selectedSignature);
 }
+
+export async function getExtensionEnabled(): Promise<boolean | undefined> {
+  const data = await storage.local.get<{ isEnabled: boolean }>(
+    "syncSignatureStatus"
+  );
+  return data?.isEnabled;
+}
+
+export async function setExtensionEnabled(isEnabled: boolean): Promise<void> {
+  return storage.local.set("syncSignatureStatus", { isEnabled });
+}

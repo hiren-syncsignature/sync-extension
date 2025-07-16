@@ -36,25 +36,35 @@ function insertSignature(composeElement: HTMLElement, signature: string): void {
 }
 
 function tryInsertSignature(composeElement: HTMLElement): void {
-  // This is the most important check. If we've seen this element before, do nothing.
   if (processedComposeElements.has(composeElement)) {
     return;
   }
   
-  chrome.storage.local.get("selectedSignature", (data: { selectedSignature?: SelectedSignature }) => {
-    if (chrome.runtime.lastError) { 
-        console.error("❌ SyncSignature: Error retrieving signature from storage:", chrome.runtime.lastError); 
-        return; 
+  chrome.storage.local.get("syncSignatureStatus", (status) => {
+    if (status.syncSignatureStatus?.isEnabled === false) {
+      console.log("SyncSignature is disabled. Skipping insertion.");
+      return;
     }
-    if (data.selectedSignature && data.selectedSignature.content) {
-      insertSignature(composeElement, data.selectedSignature.content);
-    } else {
-      console.warn("⚠️ SyncSignature: No valid signature was found in storage.");
-    }
-  });
+    chrome.storage.local.get(
+      "selectedSignature",
+      (data: { selectedSignature?: SelectedSignature }) => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            "❌ SyncSignature: Error retrieving signature from storage:",
+            chrome.runtime.lastError
+          );
+          return;
+        }
+        if (data.selectedSignature && data.selectedSignature.content) {
+          insertSignature(composeElement, data.selectedSignature.content);
+        } else {
+          console.warn("⚠️ SyncSignature: No valid signature was found in storage.");
+        }
+      }
+    );
 
-  // Mark this element as processed so we never touch it again.
-  processedComposeElements.add(composeElement);
+    processedComposeElements.add(composeElement);
+  });
 }
 
 function findAndProcessComposeBox(elementToSearch: HTMLElement) {

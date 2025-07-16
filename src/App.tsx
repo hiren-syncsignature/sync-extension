@@ -17,6 +17,7 @@ import LoginPrompt from "./components/LoginPrompt";
 import ErrorAlert from "./components/ErrorAlert";
 import Toast from "./components/Toast";
 import "./App.css";
+import { getExtensionEnabled, setExtensionEnabled } from "./utils/storage";
 
 function App() {
   const [userObject, setUserObjectState] = useState<UserObject | null>(null);
@@ -29,6 +30,7 @@ function App() {
     text: string;
     type: "success" | "info" | "error";
   } | null>(null);
+  const [isExtensionEnabled, setIsExtensionEnabled] = useState(true);
 
   useEffect(() => {
     // Initial data load
@@ -48,6 +50,9 @@ function App() {
     try {
       setIsLoading(true);
       setError(null);
+
+      const storedState = await getExtensionEnabled();
+      setIsExtensionEnabled(storedState !== false);
 
       // Load user object
       const storedUser = await getUserObject();
@@ -71,6 +76,20 @@ function App() {
       setIsLoading(false);
     }
   }
+
+  async function handleToggleExtension(enabled: boolean) {
+    try {
+      await setExtensionEnabled(enabled);
+      setIsExtensionEnabled(enabled);
+      setStatusMessage({
+        text: `Signature insertion is now ${enabled ? "ON" : "OFF"}`,
+        type: "info",
+      });
+    } catch (err) {
+      setError("Failed to update setting");
+    }
+  }
+
 
   async function loadSignatures(userId: string) {
     // Check if we have cached signatures first
@@ -217,6 +236,8 @@ function App() {
               setSelectedSignatureState={setSelectedSignatureState}
               setStatusMessage={setStatusMessage}
               setError={setError}
+              isExtensionEnabled={isExtensionEnabled}
+              onToggleExtension={handleToggleExtension}          
             />
           )}
 
