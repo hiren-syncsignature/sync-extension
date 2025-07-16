@@ -17,10 +17,21 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 });
 
 function insertSignature(composeElement: HTMLElement, signature: string): void {
-  // Final, successful insertion log.
-  console.log("%c✅ SyncSignature: Signature successfully inserted.", "color: green; font-weight: bold;", composeElement);
+  // A new log to show we're using the special wrapper
+  console.log("%c✅ SyncSignature: Inserting signature with Outlook 'contenteditable' wrapper.", "color: blue; font-weight: bold;");
+  
+  // Clear the compose box
   composeElement.innerHTML = "";
-  composeElement.insertAdjacentHTML("beforeend", `<br><br><br><div class="SyncSignature" style="margin-top: 10px;">${signature}</div>`);
+  
+  // This is the new, more powerful wrapper.
+  const outlookMagicWrapper = `
+    <br><br><br>
+    <div class="SyncSignature" contenteditable="false" style="font-family: Calibri, Arial, Helvetica, sans-serif; font-size: 12pt;">
+    ${signature}
+    </div>
+  `;
+  
+  composeElement.insertAdjacentHTML("beforeend", outlookMagicWrapper);
   composeElement.setAttribute("data-signature-inserted", "true");
 }
 
