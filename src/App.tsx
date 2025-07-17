@@ -236,8 +236,6 @@ function App() {
               setSelectedSignatureState={setSelectedSignatureState}
               setStatusMessage={setStatusMessage}
               setError={setError}
-              isExtensionEnabled={isExtensionEnabled}
-              onToggleExtension={handleToggleExtension}          
             />
           )}
 
@@ -247,6 +245,9 @@ function App() {
               selectedSignature={selectedSignatureState}
               onSelectSignature={handleSelectSignature}
               setStatusMessage={setStatusMessage}
+              isExtensionEnabled={isExtensionEnabled}
+              onToggleExtension={handleToggleExtension}          
+
             />
           ) : (
             <div className="empty-state">

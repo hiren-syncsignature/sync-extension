@@ -14,7 +14,7 @@ interface ToggleSwitchProps {
     return (
       <div className="flex items-center justify-between">
         <div className="flex flex-col">
-          <span className="text-gray-800 font-medium">{label}</span>
+          <span className="text-gray-800 font-medium mr-2">{label}</span>
           <span className="text-sm text-gray-500">{description}</span>
         </div>
         <button

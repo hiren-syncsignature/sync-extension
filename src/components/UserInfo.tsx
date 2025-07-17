@@ -2,7 +2,6 @@
 import type { SelectedSignature, Signature, UserObject } from "../types";
 import ActionButtons from "./ActionButtons";
 import { handleClearData } from "../utils/actions";
-import ToggleSwitch from "./ToggleSwitch";
 
 interface UserInfoProps {
   user: UserObject;
@@ -13,8 +12,6 @@ interface UserInfoProps {
     message: { text: string; type: "success" | "info" | "error" } | null
   ) => void;
   setError: (error: string | null) => void;
-  isExtensionEnabled: boolean;
-  onToggleExtension: (enabled: boolean) => void;
 }
 
 const UserInfo = ({
@@ -23,10 +20,9 @@ const UserInfo = ({
   setSignaturesState,
   setSelectedSignatureState,
   setStatusMessage,
-  setError,
-  isExtensionEnabled,
-  onToggleExtension,
+  setError
 }: UserInfoProps) => {
+  // Generate initials from name
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -42,11 +38,7 @@ const UserInfo = ({
     <div className="user-info-card">
       <div className="user-avatar">
         {user.avatar ? (
-          <img
-            src={user.avatar || "/placeholder.svg"}
-            alt={user.name || "User"}
-            className="avatar-image"
-          />
+          <img src={user.avatar || "/placeholder.svg"} alt={user.name || "User"} className="avatar-image" />
         ) : (
           <div className="avatar-placeholder">{initials}</div>
         )}
@@ -55,24 +47,9 @@ const UserInfo = ({
         <h2 className="user-name">{user.name || "Unknown User"}</h2>
         <p className="user-email">{user.email || "No email available"}</p>
       </div>
-
-      <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
-        <ToggleSwitch
-          label="Enable Signatures"
-          description="Add signature to new emails"
-          enabled={isExtensionEnabled}
-          onChange={onToggleExtension}
-        />
+      <div className="pb-4">
         <ActionButtons
-          onClear={() =>
-            handleClearData(
-              setUserObjectState,
-              setSignaturesState,
-              setSelectedSignatureState,
-              setStatusMessage,
-              setError
-            )
-          }
+          onClear={() => handleClearData(setUserObjectState, setSignaturesState, setSelectedSignatureState, setStatusMessage, setError)}
           type="logout"
         />
       </div>

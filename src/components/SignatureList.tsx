@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { Signature, SelectedSignature } from "../types";
+import ToggleSwitch from "./ToggleSwitch";
 
 interface SignatureListProps {
   signatures: Signature[];
@@ -8,6 +9,9 @@ interface SignatureListProps {
   setStatusMessage?: (
     message: { text: string; type: "success" | "info" | "error" } | null
   ) => void;
+  isExtensionEnabled: boolean
+  onToggleExtension: (e: boolean) => void      
+
 }
 
 const SignatureList = ({
@@ -15,6 +19,8 @@ const SignatureList = ({
   selectedSignature,
   onSelectSignature,
   setStatusMessage,
+  isExtensionEnabled,
+  onToggleExtension
 }: SignatureListProps) => {
   const isSelected = (index: number) => {
     return selectedSignature?.index === index;
@@ -99,6 +105,12 @@ const SignatureList = ({
                 )}
               </div>
               <div className="signature-actions flex gap-3">
+                        <ToggleSwitch
+                          label="Enable Signature"
+                          description=""
+                          enabled={isExtensionEnabled}
+                          onChange={onToggleExtension}
+                        />
                 <button
                   className="download-button"
                   onClick={(e) => {
