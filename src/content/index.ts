@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SelectedSignature } from "../types/index";
 
-console.log("✅ SyncSignature: Content script is active.");
+// console.log("✅ SyncSignature: Content script is active.");
 
 // --- SELECTORS ---
 const GMAIL_SELECTOR = 'div[aria-label="Message Body"]';
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
 
 function insertSignature(composeElement: HTMLElement, signature: string): void {
   // A new log to show we're using the special wrapper
-  console.log("%c✅ SyncSignature: Inserting signature with Outlook 'contenteditable' wrapper.", "color: blue; font-weight: bold;");
+  // console.log("%c✅ SyncSignature: Inserting signature with Outlook 'contenteditable' wrapper.", "color: blue; font-weight: bold;");
   
   // Clear the compose box
   composeElement.innerHTML = "";
@@ -42,7 +42,7 @@ function tryInsertSignature(composeElement: HTMLElement): void {
   
   chrome.storage.local.get("syncSignatureStatus", (status) => {
     if (status.syncSignatureStatus?.isEnabled === false) {
-      console.log("SyncSignature is disabled. Skipping insertion.");
+      // console.log("SyncSignature is disabled. Skipping insertion.");
       return;
     }
     chrome.storage.local.get(
