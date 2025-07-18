@@ -6,31 +6,46 @@ import { SelectedSignature } from "../types/index";
 // --- SELECTORS ---
 const GMAIL_SELECTOR = 'div[aria-label="Message Body"]';
 const OUTLOOK_SELECTOR = 'div[aria-label="Message body, press Alt+F10 to exit"]';
-const allComposeSelectors = [GMAIL_SELECTOR, OUTLOOK_SELECTOR].join(", ");
+const ICLOUD_SELECTOR = '.RichTextEditor-body'; // This is a placeholder selector
+const allComposeSelectors = [GMAIL_SELECTOR, OUTLOOK_SELECTOR, ICLOUD_SELECTOR].join(", ");
 
 const processedComposeElements = new WeakSet<HTMLElement>();
 
 // --- CORE FUNCTIONS ---
 
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  if (request.action === "getLocalStorageItem") { try { const value = localStorage.getItem(request.key); sendResponse({ value: value }); } catch (e) { sendResponse({ error: e instanceof Error ? e.toString() : "Unknown error", }); } return true; } else if (request.action === "insertSignature") { sendResponse({ success: true }); return true; } return false;
+  if (request.action === "getLocalStorageItem") {
+    try {
+      const value = localStorage.getItem(request.key);
+      sendResponse({ value: value });
+    } catch (e) {
+      sendResponse({
+        error: e instanceof Error ? e.toString() : "Unknown error",
+      });
+    }
+    return true;
+  } else if (request.action === "insertSignature") {
+    sendResponse({ success: true });
+    return true;
+  }
+  return false;
 });
 
 function insertSignature(composeElement: HTMLElement, signature: string): void {
   // A new log to show we're using the special wrapper
-  // console.log("%c✅ SyncSignature: Inserting signature with Outlook 'contenteditable' wrapper.", "color: blue; font-weight: bold;");
-  
+  console.log("%c✅ SyncSignature: Inserting signature with Outlook 'contenteditable' wrapper.", "color: blue; font-weight: bold;");
+
   // Clear the compose box
   composeElement.innerHTML = "";
-  
+
   // This is the new, more powerful wrapper.
   const outlookMagicWrapper = `
     <br><br><br>
-    <div class="SyncSignature" contenteditable="false" style="font-family: Calibri, Arial, Helvetica, sans-serif; font-size: 12pt;">
+    <div class="SyncSignature" contenteditable="false"">
     ${signature}
     </div>
   `;
-  
+
   composeElement.insertAdjacentHTML("beforeend", outlookMagicWrapper);
   composeElement.setAttribute("data-signature-inserted", "true");
 }
@@ -39,10 +54,10 @@ function tryInsertSignature(composeElement: HTMLElement): void {
   if (processedComposeElements.has(composeElement)) {
     return;
   }
-  
+
   chrome.storage.local.get("syncSignatureStatus", (status) => {
     if (status.syncSignatureStatus?.isEnabled === false) {
-      // console.log("SyncSignature is disabled. Skipping insertion.");
+      console.log("SyncSignature is disabled. Skipping insertion.");
       return;
     }
     chrome.storage.local.get(
@@ -76,8 +91,7 @@ function findAndProcessComposeBox(elementToSearch: HTMLElement) {
     }
 }
 
-// --- INITIALIZATION LOGIC ---
-const supportedHosts = ["mail.google.com", "outlook.live.com", "outlook.office.com"];
+const supportedHosts = ["mail.google.com", "outlook.live.com", "outlook.office.com", "www.icloud.com"];
 
 if (supportedHosts.includes(window.location.hostname)) {
   setTimeout(() => {
@@ -92,7 +106,6 @@ if (supportedHosts.includes(window.location.hostname)) {
           if (mutation.target instanceof HTMLElement) elementsToScan.add(mutation.target);
         }
       }
-      // This will now silently check all mutated elements.
       elementsToScan.forEach(findAndProcessComposeBox);
     });
 
@@ -103,7 +116,6 @@ if (supportedHosts.includes(window.location.hostname)) {
       attributeFilter: ['class', 'style']
     });
 
-    // Initial check on page load (runs once).
     const existingComposeFields = document.querySelectorAll(allComposeSelectors);
     if (existingComposeFields.length > 0) {
       existingComposeFields.forEach((field) => tryInsertSignature(field as HTMLElement));
